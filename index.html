@@ -1,0 +1,1591 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AidLink | Trusted Humanitarian Aid Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-hands-helping"></i>
+                </div>
+                <div class="logo-text">Aid<span>Link</span></div>
+            </div>
+
+            <nav>
+                <ul>
+                    <li><a href="#" class="nav-link" data-page="home">Home</a></li>
+                    <li><a href="#" class="nav-link" data-page="donate">Donate</a></li>
+                    <li><a href="#" class="nav-link" data-page="aid-types">Aid Types</a></li>
+                    <li><a href="#" class="nav-link" data-page="contact">Contact</a></li>
+                </ul>
+            </nav>
+
+            <div style="display: flex; align-items: center;">
+                <!-- Auth buttons (shown when not logged in) -->
+                <div class="auth-buttons" id="authButtons">
+                    <button class="btn btn-outline" id="loginBtn">Log In</button>
+                    <button class="btn btn-primary" id="registerBtn">Sign Up</button>
+                </div>
+
+                <!-- User menu (shown when logged in) -->
+                <div class="user-menu" id="userMenu">
+                    <div class="user-dropdown">
+                        <div class="user-avatar" id="userAvatar">JD</div>
+                        <div class="dropdown-menu" id="dropdownMenu">
+                            <a href="#" class="dropdown-link" data-page="dashboard"><i
+                                    class="fas fa-tachometer-alt"></i> Dashboard</a>
+                            <a href="#" class="dropdown-link" data-page="donation-history"><i
+                                    class="fas fa-history"></i> Donation History</a>
+                            <a href="#" class="dropdown-link" data-page="volunteering"><i class="fas fa-hands"></i>
+                                Volunteering</a>
+                            <a href="#" class="dropdown-link" data-page="profile"><i class="fas fa-user"></i>
+                                Profile</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="theme-toggle" id="themeToggle">
+                    <div class="toggle-circle">
+                        <i class="fas fa-sun toggle-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </header>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeLoginModal">&times;</button>
+            <div class="modal-header">
+                <h2 class="modal-title">Welcome Back</h2>
+                <p class="modal-subtitle">Log in to your AidLink account</p>
+            </div>
+
+            <form id="loginForm">
+                <div class="form-section">
+                    <div class="form-group">
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope input-icon"></i>
+                            <input type="email" id="loginEmail" placeholder="Email Address" required>
+                        </div>
+                        <div class="error-message" id="loginEmailError">Please enter a valid email address</div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" id="loginPassword" placeholder="Password" required>
+                            <button type="button" class="password-toggle" id="loginPasswordToggle">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="error-message" id="loginPasswordError">Password must be at least 6 characters</div>
+                    </div>
+                </div>
+
+                <div class="form-checkbox">
+                    <input type="checkbox" id="rememberMe">
+                    <label for="rememberMe">Remember me</label>
+                    <a href="#" class="form-link" id="forgotPassword" style="margin-left: auto;">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary"
+                    style="width: 100%; padding: 16px; font-size: 16px; margin-top: 10px;">
+                    <i class="fas fa-sign-in-alt"></i> Log In
+                </button>
+
+                <div class="form-divider">
+                    <span>Or continue with</span>
+                </div>
+
+                <button type="button" class="btn btn-light" style="width: 100%; margin-bottom: 15px;">
+                    <i class="fab fa-google"></i> Continue with Google
+                </button>
+
+                <div class="form-switch">
+                    Don't have an account? <a href="#" class="form-link" id="switchToRegister">Sign up now</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeRegisterModal">&times;</button>
+            <div class="modal-header">
+                <h2 class="modal-title">Join AidLink</h2>
+                <p class="modal-subtitle">Create your account to make a difference</p>
+            </div>
+
+            <form id="registerForm">
+                <div class="form-section">
+                    <h3 class="form-section-title">Select Account Type</h3>
+                    <div class="account-type-selector">
+                        <div class="account-type" data-account-type="donor">
+                            <div class="account-type-icon">
+                                <i class="fas fa-hand-holding-heart"></i>
+                            </div>
+                            <h4>Donor / Volunteer</h4>
+                            <p>Donate or volunteer with verified organizations</p>
+                        </div>
+                        <div class="account-type" data-account-type="organization">
+                            <div class="account-type-icon">
+                                <i class="fas fa-building"></i>
+                            </div>
+                            <h4>Organization</h4>
+                            <p>Register your verified humanitarian organization</p>
+                        </div>
+                    </div>
+                    <input type="hidden" id="accountType" value="donor">
+                </div>
+
+                <div class="form-section">
+                    <h3 class="form-section-title">Personal Information</h3>
+                    <div class="form-group">
+                        <div class="input-with-icon">
+                            <i class="fas fa-user input-icon"></i>
+                            <input type="text" id="registerName" placeholder="Full Name" required>
+                        </div>
+                        <div class="error-message" id="registerNameError">Please enter your full name</div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope input-icon"></i>
+                            <input type="email" id="registerEmail" placeholder="Email Address" required>
+                        </div>
+                        <div class="error-message" id="registerEmailError">Please enter a valid email address</div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-with-icon">
+                            <i class="fas fa-phone input-icon"></i>
+                            <input type="tel" id="registerPhone" placeholder="Phone Number (Optional)">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="form-section-title">Security</h3>
+                    <div class="form-group">
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" id="registerPassword" placeholder="Create Password" required>
+                            <button type="button" class="password-toggle" id="registerPasswordToggle">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="error-message" id="registerPasswordError">Password must be at least 8 characters
+                            with letters and numbers</div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" id="registerConfirmPassword" placeholder="Confirm Password" required>
+                        </div>
+                        <div class="error-message" id="registerConfirmPasswordError">Passwords do not match</div>
+                    </div>
+
+                    <div class="form-checkbox">
+                        <input type="checkbox" id="agreeTerms" required>
+                        <label for="agreeTerms">I agree to the <a href="#" class="form-link">Terms of Service</a> and <a
+                                href="#" class="form-link">Privacy Policy</a></label>
+                        <div class="error-message" id="agreeTermsError">You must agree to the terms</div>
+                    </div>
+                </div>
+
+                <div class="success-message" id="registerSuccess">Registration successful! Redirecting...</div>
+
+                <button type="submit" class="btn btn-primary"
+                    style="width: 100%; padding: 16px; font-size: 16px; margin-top: 10px;">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+
+                <div class="form-switch">
+                    Already have an account? <a href="#" class="form-link" id="switchToLogin">Log in here</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Money Donation Modal -->
+    <div class="modal" id="donateMoneyModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeDonateMoneyModal">&times;</button>
+            <div class="modal-header">
+                <h2 class="modal-title">Make a Monetary Donation</h2>
+                <p class="modal-subtitle">Support humanitarian efforts with a financial contribution</p>
+            </div>
+
+            <form id="donateMoneyForm">
+                <div class="form-section">
+                    <h3 class="form-section-title">Donation Amount</h3>
+                    <div class="donation-options">
+                        <div class="donation-option" data-amount="25">$25</div>
+                        <div class="donation-option" data-amount="50">$50</div>
+                        <div class="donation-option" data-amount="100">$100</div>
+                        <div class="donation-option" data-amount="250">$250</div>
+                        <div class="donation-option" data-amount="500">$500</div>
+                        <div class="donation-option custom" id="customAmountOption">
+                            <input type="number" id="customAmount" placeholder="Custom amount ($)" min="1"
+                                style="width: 100%; padding: 10px; border: 1px solid var(--light-border); border-radius: var(--border-radius-sm);">
+                        </div>
+                    </div>
+                    <input type="hidden" id="donationAmount" value="25" required>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="form-section-title">Campaign</h3>
+                    <div class="form-group">
+                        <select id="donationCampaign" required>
+                            <option value="">Select a campaign to support</option>
+                            <option value="Emergency Food Supplies">Emergency Food Supplies</option>
+                            <option value="Medical Clinic Supplies">Medical Clinic Supplies</option>
+                            <option value="School Rebuilding Project">School Rebuilding Project</option>
+                            <option value="Winter Clothing for Refugees">Winter Clothing for Refugees</option>
+                            <option value="General Fund">General Humanitarian Fund</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="form-section-title">Payment Information</h3>
+                    <div class="form-group">
+                        <label for="cardName">Name on Card</label>
+                        <input type="text" id="cardName" placeholder="John Doe" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cardNumber">Card Number</label>
+                        <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" required>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label for="cardExpiry">Expiry Date</label>
+                            <input type="text" id="cardExpiry" placeholder="MM/YY" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cardCVC">CVC</label>
+                            <input type="text" id="cardCVC" placeholder="123" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="success-message" id="donateMoneySuccess">Donation processed successfully!</div>
+
+                <button type="submit" class="btn btn-primary"
+                    style="width: 100%; padding: 16px; font-size: 16px; margin-top: 10px;">
+                    <i class="fas fa-donate"></i> Donate <span id="donateAmountText">$25</span>
+                </button>
+
+                <p style="text-align: center; margin-top: 20px; font-size: 14px; opacity: 0.8;">
+                    <i class="fas fa-lock" style="color: var(--accent); margin-right: 5px;"></i>
+                    Your payment is secured with 256-bit encryption
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div class="modal" id="forgotPasswordModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeForgotPasswordModal">&times;</button>
+            <div class="modal-header">
+                <h2 class="modal-title">Reset Password</h2>
+                <p class="modal-subtitle">Enter your email to receive a password reset link</p>
+            </div>
+
+            <form id="forgotPasswordForm">
+                <div class="form-section">
+                    <div class="form-group">
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope input-icon"></i>
+                            <input type="email" id="forgotEmail" placeholder="Enter your email address" required>
+                        </div>
+                        <div class="error-message" id="forgotEmailError">Please enter a valid email address</div>
+                    </div>
+
+                    <p style="text-align: center; margin: 20px 0; font-size: 14px; opacity: 0.8;">
+                        <i class="fas fa-info-circle" style="color: var(--accent); margin-right: 5px;"></i>
+                        We'll send you a link to reset your password
+                    </p>
+                </div>
+
+                <div class="success-message" id="forgotPasswordSuccess">Reset link sent! Check your email.</div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 16px; font-size: 16px;">
+                    <i class="fas fa-paper-plane"></i> Send Reset Link
+                </button>
+
+                <div class="form-switch" style="margin-top: 20px;">
+                    <a href="#" class="form-link" id="backToLogin"><i class="fas fa-arrow-left"></i> Back to login</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Enhanced Donate Items Modal -->
+    <div class="modal" id="donateItemsModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeDonateItemsModal">&times;</button>
+            <div class="modal-header">
+                <h2 class="modal-title">Donate Physical Items</h2>
+                <p class="modal-subtitle">Schedule your item donation</p>
+            </div>
+
+            <form id="donateItemsForm">
+                <div class="form-section">
+                    <h3 class="form-section-title">Item Details</h3>
+                    <div class="form-group">
+                        <label for="itemType">Item Type</label>
+                        <select id="itemType" required>
+                            <option value="">Select item type</option>
+                            <option value="clothing">Clothing</option>
+                            <option value="food">Non-perishable Food</option>
+                            <option value="medical">Medical Supplies</option>
+                            <option value="hygiene">Hygiene Kits</option>
+                            <option value="educational">Educational Materials</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="itemQuantity">Quantity</label>
+                        <input type="text" id="itemQuantity" placeholder="e.g., 5 boxes, 20 items, 10 kg" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="itemDescription">Item Description</label>
+                        <textarea id="itemDescription" rows="3"
+                            placeholder="Please describe the items you're donating..." required></textarea>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="form-section-title">Donation Details</h3>
+                    <div class="form-group">
+                        <label for="donationDate">Preferred Donation Date</label>
+                        <input type="date" id="donationDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="deliveryMethod">Delivery Method</label>
+                        <select id="deliveryMethod" required>
+                            <option value="">Select delivery method</option>
+                            <option value="dropoff">I will drop off</option>
+                            <option value="pickup">Request pickup</option>
+                            <option value="shipping">I will ship</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="donorNotes">Additional Notes</label>
+                        <textarea id="donorNotes" rows="2"
+                            placeholder="Any special instructions or notes..."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="form-section-title">For which organization?</h3>
+                    <div class="form-group">
+                        <select id="itemOrganization" required>
+                            <option value="">Select organization</option>
+                            <option value="Global Hunger Relief">Global Hunger Relief</option>
+                            <option value="Doctors Without Borders">Doctors Without Borders</option>
+                            <option value="Education for All">Education for All</option>
+                            <option value="Refugee Support Network">Refugee Support Network</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="success-message" id="donateItemsSuccess">Donation scheduled successfully!</div>
+
+                <button type="submit" class="btn btn-primary"
+                    style="width: 100%; padding: 16px; font-size: 16px; margin-top: 10px;">
+                    <i class="fas fa-calendar-check"></i> Schedule Donation
+                </button>
+
+                <p style="text-align: center; margin-top: 20px; font-size: 14px; opacity: 0.8;">
+                    <i class="fas fa-clock" style="color: var(--accent); margin-right: 5px;"></i>
+                    We'll contact you within 48 hours to confirm details
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Enhanced Volunteer Application Modal -->
+    <div class="modal" id="volunteerModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeVolunteerModal">&times;</button>
+            <div class="modal-header">
+                <h2 class="modal-title" id="volunteerModalTitle">Apply to Volunteer</h2>
+                <p class="modal-subtitle" id="volunteerModalSubtitle"></p>
+            </div>
+
+            <form id="volunteerForm">
+                <div class="form-section">
+                    <h3 class="form-section-title">Personal Information</h3>
+                    <div class="form-group">
+                        <label for="volunteerName">Full Name</label>
+                        <input type="text" id="volunteerName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="volunteerEmail">Email Address</label>
+                        <input type="email" id="volunteerEmail" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="volunteerPhone">Phone Number</label>
+                        <input type="tel" id="volunteerPhone" placeholder="+1 (555) 123-4567" required>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="form-section-title">Volunteer Details</h3>
+                    <div class="form-group">
+                        <label for="volunteerExperience">Relevant Experience & Skills</label>
+                        <textarea id="volunteerExperience" rows="4"
+                            placeholder="Describe any relevant experience, skills, or qualifications..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="volunteerAvailability">Preferred Availability</label>
+                        <select id="volunteerAvailability" required>
+                            <option value="">Select availability</option>
+                            <option value="weekdays">Weekdays</option>
+                            <option value="weekends">Weekends</option>
+                            <option value="flexible">Flexible</option>
+                            <option value="remote">Remote only</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="volunteerCommitment">Time Commitment</label>
+                        <select id="volunteerCommitment" required>
+                            <option value="">Select commitment level</option>
+                            <option value="one-time">One-time</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="bi-weekly">Bi-weekly</option>
+                            <option value="monthly">Monthly</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="volunteerOrganization">Organization</label>
+                        <select id="volunteerOrganization" required>
+                            <option value="">Select organization</option>
+                            <option value="Community Food Bank">Community Food Bank</option>
+                            <option value="Education for All">Education for All</option>
+                            <option value="Global Relief Network">Global Relief Network</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="form-section-title">Additional Information</h3>
+                    <div class="form-group">
+                        <label for="volunteerMotivation">Why do you want to volunteer with us?</label>
+                        <textarea id="volunteerMotivation" rows="3"
+                            placeholder="Share your motivation for volunteering..."></textarea>
+                    </div>
+
+                    <div class="form-checkbox">
+                        <input type="checkbox" id="volunteerAgreement" required>
+                        <label for="volunteerAgreement">I understand this is a volunteer position and I commit to the
+                            responsibilities involved</label>
+                    </div>
+                </div>
+
+                <div class="success-message" id="volunteerSuccess">Application submitted successfully!</div>
+
+                <button type="submit" class="btn btn-primary"
+                    style="width: 100%; padding: 16px; font-size: 16px; margin-top: 10px;">
+                    <i class="fas fa-paper-plane"></i> Submit Application
+                </button>
+
+                <p style="text-align: center; margin-top: 20px; font-size: 14px; opacity: 0.8;">
+                    <i class="fas fa-clock" style="color: var(--accent); margin-right: 5px;"></i>
+                    We'll contact you within 3-5 business days
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Organization Request Aid Modal -->
+    <div class="modal" id="requestAidModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeRequestAidModal">&times;</button>
+            <div class="modal-header">
+                <h2 class="modal-title">Request Aid</h2>
+                <p class="modal-subtitle">Create a new aid request for your organization</p>
+            </div>
+
+            <form id="requestAidForm">
+                <div class="form-section">
+                    <h3 class="form-section-title">Aid Request Details</h3>
+                    <div class="form-group">
+                        <label for="aidTitle">Request Title</label>
+                        <input type="text" id="aidTitle" placeholder="e.g., Emergency Food Supplies for Drought Victims"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="aidDescription">Description</label>
+                        <textarea id="aidDescription" rows="4"
+                            placeholder="Describe the aid needed, who it will help, and why it's important..."
+                            required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="aidType">Aid Type</label>
+                        <select id="aidType" required>
+                            <option value="">Select aid type</option>
+                            <option value="food">Food & Water</option>
+                            <option value="clothing">Clothing</option>
+                            <option value="medical">Medical Supplies</option>
+                            <option value="shelter">Shelter</option>
+                            <option value="education">Educational Materials</option>
+                            <option value="hygiene">Hygiene Kits</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="form-section-title">Location & Urgency</h3>
+                    <div class="form-group">
+                        <label for="aidLocation">Location</label>
+                        <input type="text" id="aidLocation" placeholder="City, Country" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="aidUrgency">Urgency Level</label>
+                        <select id="aidUrgency" required>
+                            <option value="low">Low - Need within 30 days</option>
+                            <option value="medium">Medium - Need within 2 weeks</option>
+                            <option value="high">High - Need within 1 week</option>
+                            <option value="urgent">Urgent - Immediate need</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="aidQuantity">Quantity Needed</label>
+                        <input type="text" id="aidQuantity" placeholder="e.g., 500 meals, 100 blankets, 50 medical kits"
+                            required>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="form-section-title">Additional Information</h3>
+                    <div class="form-group">
+                        <label for="aidDeadline">Deadline</label>
+                        <input type="date" id="aidDeadline" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="aidNotes">Special Instructions</label>
+                        <textarea id="aidNotes" rows="3"
+                            placeholder="Any special instructions for donors..."></textarea>
+                    </div>
+                </div>
+
+                <div class="success-message" id="requestAidSuccess">Aid request submitted successfully!</div>
+
+                <button type="submit" class="btn btn-primary"
+                    style="width: 100%; padding: 16px; font-size: 16px; margin-top: 10px;">
+                    <i class="fas fa-plus-circle"></i> Submit Aid Request
+                </button>
+
+                <p style="text-align: center; margin-top: 20px; font-size: 14px; opacity: 0.8;">
+                    <i class="fas fa-info-circle" style="color: var(--accent); margin-right: 5px;"></i>
+                    Your request will appear on the Donate page after verification
+                </p>
+            </form>
+        </div>
+    </div>
+    <style>
+        #home-page {
+            padding: 0;
+        }
+    </style>
+    <!-- Main Content Area -->
+    <main>
+        <!-- Home Page -->
+        <section id="home-page" class="page active">
+            <!-- Hero Section -->
+            <div class="hero">
+                <div class="container">
+                    <h1>Connecting People with Trusted Help</h1>
+                    <p>A smart platform that links volunteers and organizations to provide aid efficiently and safely.
+                    </p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" id="donateHeroBtn"><i class="fas fa-donate"></i> Donate
+                            Now</button>
+                        <button class="btn btn-outline" id="volunteerHeroBtn"><i class="fas fa-hands"></i>
+                            Volunteer</button>
+                        <button class="btn btn-outline" id="orgHeroBtn"><i class="fas fa-building"></i> Join as
+                            Organization</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- How It Works Section -->
+            <section class="container mainSection">
+                <h2 class="section-title">How AidLink Works</h2>
+                <div class="steps-container">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Organizations Register</h3>
+                        <p>Humanitarian organizations register and undergo a thorough verification process to ensure
+                            legitimacy.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>Publish Aid Requests</h3>
+                        <p>Verified organizations publish aid requests or campaigns for specific needs.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Explore & Choose</h3>
+                        <p>Users explore aid opportunities and choose how they want to help - through donations or
+                            volunteering.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h3>Track Impact</h3>
+                        <p>All donations and volunteering activities are tracked transparently so you can see your
+                            impact.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Aid Types Section -->
+            <section style="background-color: rgba(74, 85, 48, 0.05);" class="mt-5 mainSection">
+                <div class="container">
+                    <h2 class="section-title">Aid Types</h2>
+                    <div class="aid-types">
+                        <div class="aid-type" data-type="basic-needs">
+                            <div class="aid-icon"><i class="fas fa-utensils"></i></div>
+                            <h3>Basic Needs</h3>
+                            <p>Food, water, shelter, and clothing for those in immediate need.</p>
+                        </div>
+                        <div class="aid-type" data-type="medical">
+                            <div class="aid-icon"><i class="fas fa-briefcase-medical"></i></div>
+                            <h3>Medical Aid</h3>
+                            <p>Medical supplies, equipment, and healthcare support for communities.</p>
+                        </div>
+                        <div class="aid-type" data-type="education">
+                            <div class="aid-icon"><i class="fas fa-graduation-cap"></i></div>
+                            <h3>Educational Support</h3>
+                            <p>Books, supplies, and resources for schools and educational programs.</p>
+                        </div>
+                        <div class="aid-type" data-type="emergency">
+                            <div class="aid-icon"><i class="fas fa-house-fire"></i></div>
+                            <h3>Emergency & Disaster Relief</h3>
+                            <p>Rapid response aid for natural disasters and emergency situations.</p>
+                        </div>
+                        <div class="aid-type" data-type="volunteering">
+                            <div class="aid-icon"><i class="fas fa-handshake"></i></div>
+                            <h3>Volunteering</h3>
+                            <p>Hands-on support through skilled and unskilled volunteer opportunities.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Featured Aid Requests Section -->
+            <section class="container mt-5 mainSection">
+                <h2 class="section-title">Featured Aid Requests</h2>
+                <div class="featured-requests">
+                    <div class="request-card">
+                        <div class="request-header">
+                            <span class="urgency urgent">Urgent</span>
+                            <h3>Emergency Food Supplies</h3>
+                            <p><i class="fas fa-map-marker-alt"></i> East Africa</p>
+                        </div>
+                        <div class="request-body">
+                            <p>Providing emergency food supplies to families affected by drought in East Africa. Over
+                                500 families need immediate assistance.</p>
+                            <p><strong>Aid Type:</strong> Basic Needs</p>
+                            <p><strong>Organization:</strong> Global Hunger Relief</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 49%"></div>
+                            </div>
+                            <p><strong>$24,500 raised of $50,000</strong></p>
+                        </div>
+                        <div class="request-footer">
+                            <button class="btn btn-primary donate-money-btn"
+                                data-campaign="Emergency Food Supplies">Donate Money</button>
+                            <button class="btn btn-light donate-items-btn" style="margin-left: 10px;">Donate
+                                Items</button>
+                        </div>
+                    </div>
+
+                    <div class="request-card">
+                        <div class="request-header">
+                            <span class="urgency high">High Priority</span>
+                            <h3>Medical Clinic Supplies</h3>
+                            <p><i class="fas fa-map-marker-alt"></i> Ukraine</p>
+                        </div>
+                        <div class="request-body">
+                            <p>Supplying a field hospital with essential medical equipment and supplies to treat
+                                war-related injuries.</p>
+                            <p><strong>Aid Type:</strong> Medical Aid</p>
+                            <p><strong>Organization:</strong> Doctors Without Borders</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 78%"></div>
+                            </div>
+                            <p><strong>$78,200 raised of $100,000</strong></p>
+                        </div>
+                        <div class="request-footer">
+                            <button class="btn btn-primary donate-money-btn"
+                                data-campaign="Medical Clinic Supplies">Donate Money</button>
+                            <button class="btn btn-light donate-items-btn" style="margin-left: 10px;">Donate
+                                Items</button>
+                        </div>
+                    </div>
+
+                    <div class="request-card">
+                        <div class="request-header">
+                            <span class="urgency medium">Medium Priority</span>
+                            <h3>School Rebuilding Project</h3>
+                            <p><i class="fas fa-map-marker-alt"></i> Syria</p>
+                        </div>
+                        <div class="request-body">
+                            <p>Rebuilding a school destroyed in conflict and providing educational materials for 300
+                                children.</p>
+                            <p><strong>Aid Type:</strong> Educational Support</p>
+                            <p><strong>Organization:</strong> Education for All</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 43%"></div>
+                            </div>
+                            <p><strong>$32,000 raised of $75,000</strong></p>
+                        </div>
+                        <div class="request-footer">
+                            <button class="btn btn-primary donate-money-btn"
+                                data-campaign="School Rebuilding Project">Donate Money</button>
+                            <button class="btn btn-light donate-items-btn" style="margin-left: 10px;">Donate
+                                Items</button>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 50px;">
+                    <button class="btn btn-primary" id="exploreMoreBtn">Explore More Donation Opportunities</button>
+                </div>
+            </section>
+
+            <!-- Statistics Section -->
+            <section style="background-color: rgba(74, 85, 48, 0.05);" class="mainSection">
+                <div class="container">
+                    <h2 class="section-title">Our Impact</h2>
+                    <div class="dashboard-stats">
+                        <div class="stat-card">
+                            <div class="stat-value">$2.5M+</div>
+                            <div class="stat-label">Donations Raised</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">150+</div>
+                            <div class="stat-label">Verified Organizations</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">25k+</div>
+                            <div class="stat-label">Volunteer Hours</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">50+</div>
+                            <div class="stat-label">Countries Reached</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact Section - FIXED Get in Touch -->
+            <section class="container mainSection">
+                <h2 class="section-title">Contact Us</h2>
+                <div class="contact-container">
+                    <div class="contact-info">
+                        <h2>Get in Touch</h2>
+                        <p>Have questions or need support? Our team is here to help you make a difference.</p>
+
+                        <div style="margin-top: 30px;">
+                            <h3>Platform Contact Information</h3>
+                            <div class="contact-details">
+                                <p><i class="fas fa-envelope"></i> <strong>General Inquiries:</strong> info@aidlink.org
+                                </p>
+                                <p><i class="fas fa-hands-helping"></i> <strong>Donor Support:</strong>
+                                    donors@aidlink.org</p>
+                                <p><i class="fas fa-building"></i> <strong>Organization Support:</strong>
+                                    orgs@aidlink.org</p>
+                                <p><i class="fas fa-hands"></i> <strong>Volunteer Support:</strong>
+                                    volunteers@aidlink.org</p>
+                                <p><i class="fas fa-phone"></i> <strong>Phone:</strong> +1 (555) 123-4567</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="contact-form">
+                        <h2>Send Us a Message</h2>
+                        <form id="contactForm">
+                            <div class="form-group">
+                                <label for="name">Full Name</label>
+                                <input type="text" id="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="inquiry">Inquiry Type</label>
+                                <select id="inquiry">
+                                    <option>General Inquiry</option>
+                                    <option>Donation Support</option>
+                                    <option>Organization Registration</option>
+                                    <option>Volunteer Opportunities</option>
+                                    <option>Technical Issue</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea id="message" rows="5" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- Donations Page -->
+        <section id="donate-page" class="page">
+            <div class="container" style="padding-top: 80px;">
+                <h1 class="section-title">Active Aid Requests</h1>
+
+                <!-- Filter System - Fixed -->
+                <div class="filter-container">
+                    <h3 style="margin-bottom: 25px;">Filter Aid Requests</h3>
+                    <div class="filter-grid">
+                        <div class="form-group">
+                            <label for="filter-type">Aid Type</label>
+                            <select id="filter-type">
+                                <option value="all">All Types</option>
+                                <option value="food">Food & Water</option>
+                                <option value="clothing">Clothing</option>
+                                <option value="medical">Medical</option>
+                                <option value="education">Education</option>
+                                <option value="shelter">Shelter</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="filter-location">Location</label>
+                            <select id="filter-location">
+                                <option value="all">All Locations</option>
+                                <option value="africa">Africa</option>
+                                <option value="asia">Asia</option>
+                                <option value="europe">Europe</option>
+                                <option value="middle-east">Middle East</option>
+                                <option value="americas">Americas</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="filter-urgency">Urgency Level</label>
+                            <select id="filter-urgency">
+                                <option value="all">All Urgency Levels</option>
+                                <option value="urgent">Urgent</option>
+                                <option value="high">High</option>
+                                <option value="medium">Medium</option>
+                                <option value="low">Low</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="filter-organization">Organization</label>
+                            <select id="filter-organization">
+                                <option value="all">All Organizations</option>
+                                <option value="Global Hunger Relief">Global Hunger Relief</option>
+                                <option value="Doctors Without Borders">Doctors Without Borders</option>
+                                <option value="Education for All">Education for All</option>
+                                <option value="Refugee Support Network">Refugee Support Network</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" style="margin-top: 25px; padding: 14px 30px;"
+                        id="applyFiltersBtn">Apply Filters</button>
+                    <button class="btn btn-light" style="margin-top: 25px; padding: 14px 30px; margin-left: 10px;"
+                        id="clearFiltersBtn">Clear Filters</button>
+                </div>
+
+                <!-- Donation Requests -->
+                <div class="featured-requests" id="donationRequestsContainer">
+                    <!-- Requests loaded dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Aid Types Page -->
+        <section id="aid-types-page" class="page">
+            <div class="container" style="padding-top: 80px;">
+                <h1 class="section-title">Aid Types & Categories</h1>
+                <p
+                    style="text-align: center; max-width: 800px; margin: 0 auto 60px; font-size: 1.1rem; line-height: 1.6;">
+                    AidLink supports a wide range of humanitarian aid categories. Click on any category to explore
+                    current needs and opportunities to help.</p>
+
+                <div class="aid-types" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
+                    <div class="aid-type" onclick="switchPage('donate');">
+                        <div class="aid-icon"><i class="fas fa-utensils"></i></div>
+                        <h3>Basic Needs</h3>
+                        <p>Food, water, shelter, and clothing assistance for individuals and families in crisis.</p>
+                        <div
+                            style="margin-top: 20px; color: var(--accent); font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fas fa-circle" style="font-size: 10px;"></i> 42 Active Requests
+                        </div>
+                    </div>
+
+                    <div class="aid-type" onclick="switchPage('donate');">
+                        <div class="aid-icon"><i class="fas fa-briefcase-medical"></i></div>
+                        <h3>Medical Aid</h3>
+                        <p>Medical supplies, equipment, medicines, and healthcare support for communities in need.</p>
+                        <div
+                            style="margin-top: 20px; color: var(--accent); font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fas fa-circle" style="font-size: 10px;"></i> 28 Active Requests
+                        </div>
+                    </div>
+
+                    <div class="aid-type" onclick="switchPage('donate');">
+                        <div class="aid-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <h3>Educational Support</h3>
+                        <p>Books, supplies, school reconstruction, and educational resources for students and teachers.
+                        </p>
+                        <div
+                            style="margin-top: 20px; color: var(--accent); font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fas fa-circle" style="font-size: 10px;"></i> 19 Active Requests
+                        </div>
+                    </div>
+
+                    <div class="aid-type" onclick="switchPage('donate');">
+                        <div class="aid-icon"><i class="fas fa-house-fire"></i></div>
+                        <h3>Emergency & Disaster Relief</h3>
+                        <p>Rapid response aid for natural disasters, conflicts, and emergency situations worldwide.</p>
+                        <div
+                            style="margin-top: 20px; color: var(--accent); font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fas fa-circle" style="font-size: 10px;"></i> 36 Active Requests
+                        </div>
+                    </div>
+
+                    <div class="aid-type" onclick="switchPage('volunteering');">
+                        <div class="aid-icon"><i class="fas fa-handshake"></i></div>
+                        <h3>Volunteering</h3>
+                        <p>Hands-on support through skilled and unskilled volunteer opportunities with verified
+                            organizations.</p>
+                        <div
+                            style="margin-top: 20px; color: var(--accent); font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fas fa-circle" style="font-size: 10px;"></i> 54 Active Opportunities
+                        </div>
+                    </div>
+
+                    <div class="aid-type" onclick="switchPage('donate');">
+                        <div class="aid-icon"><i class="fas fa-tools"></i></div>
+                        <h3>Custom Aid Requests</h3>
+                        <p>Organizations can request specialized aid types based on their unique community needs.</p>
+                        <div
+                            style="margin-top: 20px; color: var(--accent); font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fas fa-circle" style="font-size: 10px;"></i> 15 Active Requests
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Page -->
+        <section id="contact-page" class="page">
+            <div class="container" style="padding-top: 80px;">
+                <h1 class="section-title">Contact AidLink</h1>
+                <div class="contact-container" style="margin-top: 50px;">
+                    <div class="contact-info">
+                        <h2>Get in Touch</h2>
+                        <p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px;">Our team is ready to assist
+                            you with any questions about donating, volunteering, or registering your organization.</p>
+
+                        <div style="margin-top: 40px;">
+                            <h3>Platform Contact Information</h3>
+                            <div class="contact-details">
+                                <p><i class="fas fa-envelope"></i> <strong>General Inquiries:</strong> info@aidlink.org
+                                </p>
+                                <p><i class="fas fa-hands-helping"></i> <strong>Donor Support:</strong>
+                                    donors@aidlink.org</p>
+                                <p><i class="fas fa-building"></i> <strong>Organization Support:</strong>
+                                    orgs@aidlink.org</p>
+                                <p><i class="fas fa-hands"></i> <strong>Volunteer Support:</strong>
+                                    volunteers@aidlink.org</p>
+                                <p><i class="fas fa-phone"></i> <strong>Phone:</strong> +1 (555) 123-4567</p>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 40px;">
+                            <h3>Office Hours</h3>
+                            <p><strong>Monday - Friday:</strong> 9:00 AM - 6:00 PM EST</p>
+                            <p><strong>Saturday:</strong> 10:00 AM - 4:00 PM EST</p>
+                            <p><strong>Sunday:</strong> Closed</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-form">
+                        <h2>Send Us a Message</h2>
+                        <form id="contactPageForm">
+                            <div class="form-group">
+                                <label for="contact-name">Full Name</label>
+                                <input type="text" id="contact-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-email">Email Address</label>
+                                <input type="email" id="contact-email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-type">I am a:</label>
+                                <select id="contact-type">
+                                    <option>Donor / Volunteer</option>
+                                    <option>Organization Representative</option>
+                                    <option>Journalist / Researcher</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-subject">Subject</label>
+                                <input type="text" id="contact-subject" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-message">Message</label>
+                                <textarea id="contact-message" rows="6" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary"
+                                style="width: 100%; padding: 16px; font-size: 16px;">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Page -->
+        <section id="dashboard-page" class="page">
+            <div class="container dashboard-container">
+                <a href="#" class="back-button" onclick="switchPage('home')">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </a>
+
+                <div class="dashboard-header">
+                    <div>
+                        <h1 class="dashboard-title">Dashboard</h1>
+                        <p class="dashboard-welcome" id="dashboardWelcome">Welcome back!</p>
+                    </div>
+                    <div>
+                        <span class="profile-badge" id="accountTypeBadge">Donor Account</span>
+                    </div>
+                </div>
+
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalDonations">$1,250</div>
+                        <div class="stat-label">Total Donations</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="donationsCount">8</div>
+                        <div class="stat-label">Donations Made</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="volunteerHours">24</div>
+                        <div class="stat-label">Volunteer Hours</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="impactScore">85%</div>
+                        <div class="stat-label">Impact Score</div>
+                    </div>
+                </div>
+
+                <div class="dashboard-cards">
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-icon">
+                            <i class="fas fa-hand-holding-heart"></i>
+                        </div>
+                        <h3 class="dashboard-card-title">Quick Donate</h3>
+                        <p>Make a quick donation to one of our urgent campaigns.</p>
+                        <button class="btn btn-primary" style="margin-top: 20px;" onclick="switchPage('donate')">Donate
+                            Now</button>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-icon">
+                            <i class="fas fa-hands"></i>
+                        </div>
+                        <h3 class="dashboard-card-title">Volunteer Opportunities</h3>
+                        <p>Find volunteer opportunities that match your skills and availability.</p>
+                        <button class="btn btn-outline"
+                            style="margin-top: 20px; border-color: var(--accent); color: var(--accent);"
+                            onclick="switchPage('volunteering')">Browse Opportunities</button>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3 class="dashboard-card-title">Your Impact</h3>
+                        <p>Track your donations and see the real-world impact you've made.</p>
+                        <button class="btn btn-light" style="margin-top: 20px;"
+                            onclick="switchPage('donation-history')">View Impact Report</button>
+                    </div>
+                </div>
+
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Recent Donations</h2>
+                        <a href="#" onclick="switchPage('donation-history')"
+                            style="color: var(--accent); text-decoration: none; font-weight: 500;">View All</a>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Campaign</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentDonations">
+                                <!-- Recent donations loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Upcoming Volunteer Activities</h2>
+                        <a href="#" onclick="switchPage('volunteering')"
+                            style="color: var(--accent); text-decoration: none; font-weight: 500;">View All</a>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Activity</th>
+                                    <th>Organization</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="upcomingVolunteering">
+                                <!-- Upcoming volunteering loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Organization Dashboard Page -->
+        <section id="organization-dashboard-page" class="page">
+            <div class="container dashboard-container">
+                <a href="#" class="back-button" onclick="switchPage('home')">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </a>
+
+                <div class="dashboard-header">
+                    <div>
+                        <h1 class="dashboard-title">Organization Dashboard</h1>
+                        <p class="dashboard-welcome" id="orgDashboardWelcome">Welcome back to your organization
+                            dashboard!</p>
+                    </div>
+                    <div>
+                        <span class="profile-badge">Organization Account</span>
+                    </div>
+                </div>
+
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="orgTotalDonations">$15,750</div>
+                        <div class="stat-label">Total Donations Received</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="orgActiveRequests">5</div>
+                        <div class="stat-label">Active Aid Requests</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="orgPendingOffers">12</div>
+                        <div class="stat-label">Pending Offers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="orgVolunteers">28</div>
+                        <div class="stat-label">Active Volunteers</div>
+                    </div>
+                </div>
+
+                <div class="organization-actions">
+                    <div class="action-card" onclick="showRequestAidModal()">
+                        <div class="dashboard-card-icon">
+                            <i class="fas fa-plus-circle"></i>
+                        </div>
+                        <h3 class="dashboard-card-title">Request Aid</h3>
+                        <p>Create a new aid request for your organization</p>
+                    </div>
+
+                    <div class="action-card" onclick="showOrganizationAidRequests()">
+                        <div class="dashboard-card-icon">
+                            <i class="fas fa-list-alt"></i>
+                        </div>
+                        <h3 class="dashboard-card-title">Manage Aid Requests</h3>
+                        <p>View and edit your organization's aid requests</p>
+                    </div>
+
+                    <div class="action-card" onclick="showDonationOffers()">
+                        <div class="dashboard-card-icon">
+                            <i class="fas fa-hand-holding-heart"></i>
+                        </div>
+                        <h3 class="dashboard-card-title">Review Donation Offers</h3>
+                        <p>Accept or reject donation offers from donors</p>
+                    </div>
+
+                    <div class="action-card" onclick="showVolunteerApplications()">
+                        <div class="dashboard-card-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 class="dashboard-card-title">Manage Volunteers</h3>
+                        <p>Review and manage volunteer applications</p>
+                    </div>
+                </div>
+
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Pending Donation Offers</h2>
+                        <button class="btn btn-primary" onclick="showDonationOffers()">View All</button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Donor</th>
+                                    <th>Offer Type</th>
+                                    <th>Details</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pendingOffers">
+                                <!-- Pending offers loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Your Active Aid Requests</h2>
+                        <button class="btn btn-primary" onclick="showOrganizationAidRequests()">View All</button>
+                    </div>
+                    <div class="featured-requests" id="orgAidRequests">
+                        <!-- Active requests loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Donation History Page -->
+        <section id="donation-history-page" class="page">
+            <div class="container dashboard-container">
+                <a href="#" class="back-button" onclick="switchPage('dashboard')">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+
+                <div class="dashboard-header">
+                    <div>
+                        <h1 class="dashboard-title">Donation History</h1>
+                        <p class="dashboard-welcome">Track all your donations and their impact</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="switchPage('donate')">
+                        <i class="fas fa-plus"></i> New Donation
+                    </button>
+                </div>
+
+                <div class="dashboard-section">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Campaign</th>
+                                    <th>Type</th>
+                                    <th>Amount/Items</th>
+                                    <th>Status</th>
+                                    <th>Impact</th>
+                                </tr>
+                            </thead>
+                            <tbody id="donationHistory">
+                                <!-- Donation history loaded dynamically -->
+                            </tbody>
+                        </table>
+                        <div class="empty-state" id="emptyDonations" style="display: none;">
+                            <i class="fas fa-history" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.5;"></i>
+                            <h3>No Donations Yet</h3>
+                            <p>Make your first donation to start tracking your impact!</p>
+                            <button class="btn btn-primary" style="margin-top: 25px;"
+                                onclick="switchPage('donate')">Make Your First Donation</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Volunteering Page -->
+        <section id="volunteering-page" class="page">
+            <div class="container dashboard-container">
+                <a href="#" class="back-button" onclick="switchPage('dashboard')">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+
+                <div class="dashboard-header">
+                    <div>
+                        <h1 class="dashboard-title">Volunteering</h1>
+                        <p class="dashboard-welcome">Find and manage volunteer opportunities</p>
+                    </div>
+                    <button class="btn btn-primary" id="findOpportunitiesBtn">
+                        <i class="fas fa-search"></i> Find Opportunities
+                    </button>
+                </div>
+
+                <div class="dashboard-cards">
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <h3 class="dashboard-card-title">Upcoming Shifts</h3>
+                        <div id="upcomingShiftsList" style="margin: 20px 0;">
+                            <!-- Upcoming shifts loaded dynamically -->
+                        </div>
+                        <button class="btn btn-outline view-schedule-btn" onclick="viewSchedule()">
+                            <i class="fas fa-calendar-alt"></i> View Schedule
+                        </button>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-icon">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <h3 class="dashboard-card-title">Your Volunteer Stats</h3>
+                        <div style="margin: 25px 0;">
+                            <div
+                                style="display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--light-border);">
+                                <span>Total Hours</span>
+                                <strong id="totalVolunteerHours">24</strong>
+                            </div>
+                            <div
+                                style="display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--light-border);">
+                                <span>Completed Shifts</span>
+                                <strong id="completedShifts">6</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Organizations</span>
+                                <strong id="volunteerOrgs">3</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-icon">
+                            <i class="fas fa-hands-helping"></i>
+                        </div>
+                        <h3 class="dashboard-card-title">Recommended Opportunities</h3>
+                        <p>Based on your skills and interests</p>
+                        <button class="btn btn-primary" style="margin-top: 20px; width: 100%;"
+                            onclick="browseRecommendations()">
+                            Browse Recommendations
+                        </button>
+                    </div>
+                </div>
+
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Available Volunteer Opportunities</h2>
+                        <div>
+                            <select id="volunteerFilter"
+                                style="padding: 10px 15px; border-radius: var(--border-radius-sm); border: 2px solid var(--light-border); background-color: var(--light-card); color: var(--light-text);">
+                                <option value="all">Filter by Type</option>
+                                <option value="onsite">On-site</option>
+                                <option value="remote">Remote</option>
+                                <option value="skilled">Skilled</option>
+                                <option value="general">General</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="featured-requests" id="volunteerOpportunities">
+                        <!-- Volunteer opportunities loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Page -->
+        <section id="profile-page" class="page">
+            <div class="container dashboard-container">
+                <a href="#" class="back-button" onclick="switchPage('dashboard')">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+
+                <div class="profile-header">
+                    <div class="profile-avatar-large" id="profileAvatarLarge">JD</div>
+                    <div class="profile-info">
+                        <h2 id="profileName">John Doe</h2>
+                        <p id="profileEmail">john.doe@example.com</p>
+                        <span class="profile-badge" id="profileAccountType">Donor Account</span>
+                    </div>
+                </div>
+
+                <div class="dashboard-section">
+                    <h2 class="section-title">Account Information</h2>
+                    <div class="dashboard-cards">
+                        <div class="dashboard-card">
+                            <h3 class="dashboard-card-title">Personal Details</h3>
+                            <form id="profileForm" style="margin-top: 25px;">
+                                <div class="form-group">
+                                    <label for="profileFullName">Full Name</label>
+                                    <input type="text" id="profileFullName" value="John Doe">
+                                </div>
+                                <div class="form-group">
+                                    <label for="profileEmailInput">Email Address</label>
+                                    <input type="email" id="profileEmailInput" value="john.doe@example.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="profilePhone">Phone Number</label>
+                                    <input type="tel" id="profilePhone" placeholder="+1 (555) 123-4567">
+                                </div>
+                                <button type="submit" class="btn btn-primary"
+                                    style="width: 100%; margin-top: 15px; padding: 14px;">Update Profile</button>
+                            </form>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <h3 class="dashboard-card-title">Security</h3>
+                            <div style="margin-top: 25px;">
+                                <div style="margin-bottom: 25px;">
+                                    <h4>Password</h4>
+                                    <p>Last changed 30 days ago</p>
+                                    <button class="btn btn-outline"
+                                        style="margin-top: 15px; width: 100%; padding: 12px;" id="changePasswordBtn">
+                                        Change Password
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <h3 class="dashboard-card-title">Preferences</h3>
+                            <div style="margin-top: 25px;">
+                                <div class="form-checkbox" style="margin-bottom: 15px;">
+                                    <input type="checkbox" id="emailNotifications" checked>
+                                    <label for="emailNotifications">Email notifications</label>
+                                </div>
+
+                                <div class="form-checkbox" style="margin-bottom: 15px;">
+                                    <input type="checkbox" id="smsNotifications">
+                                    <label for="smsNotifications">SMS notifications</label>
+                                </div>
+
+                                <div class="form-checkbox" style="margin-bottom: 25px;">
+                                    <input type="checkbox" id="urgentAlerts" checked>
+                                    <label for="urgentAlerts">Urgent aid request alerts</label>
+                                </div>
+
+                                <button class="btn btn-primary" style="width: 100%; padding: 14px;"
+                                    id="savePreferencesBtn">Save Preferences</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <button class="back-to-top" id="backToTop">
+        ↑
+    </button>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">Aid<span>Link</span></div>
+                    <p>Connecting donors and volunteers with verified organizations for safe, organized, and transparent
+                        humanitarian aid delivery.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#" class="nav-link" data-page="home">Home</a></li>
+                        <li><a href="#" class="nav-link" data-page="donate">Donate</a></li>
+                        <li><a href="#" class="nav-link" data-page="aid-types">Aid Types</a></li>
+                        <li><a href="#" class="nav-link" data-page="contact">Contact Us</a></li>
+                        <li><a href="#" onclick="switchPage('volunteering')">Volunteer Opportunities</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Transparency Reports</a></li>
+                        <li><a href="#">Verification Process</a></li>
+                        <li><a href="#">Success Stories</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Join Our Mission</h4>
+                    <p>Subscribe to our newsletter for updates on urgent needs and impact stories.</p>
+                    <div style="margin-top: 20px;">
+                        <input type="email" placeholder="Your email address"
+                            style="width: 100%; padding: 12px 15px; border-radius: var(--border-radius-sm); border: none; margin-bottom: 10px;">
+                        <button class="btn btn-primary" style="width: 100%; padding: 12px;">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="copyright">
+                <p>&copy; 2023 AidLink. All rights reserved. | Building a more compassionate world through verified
+                    humanitarian connections.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+
+</html>
